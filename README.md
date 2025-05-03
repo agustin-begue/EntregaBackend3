@@ -37,7 +37,7 @@ Podes acceder a la imagen del proyecto en Docker Hub a través del siguiente enl
 
 - ✅ Se documentó con **Swagger** todo el módulo de `Users`.
 - ✅ Se desarrollaron **tests funcionales** para todos los endpoints del router `adoption.router.js`.
-- ✅ Se creó un **Dockerfile** para generar una imagen del proyecto que ya se encuentra desplegada en **Dockerub**.
+- ✅ Se creó un **Dockerfile** para generar una imagen del proyecto que ya se encuentra desplegada en **DockerHub**.
 
 
 

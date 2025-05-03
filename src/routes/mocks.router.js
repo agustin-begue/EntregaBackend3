@@ -6,7 +6,6 @@ import { usersService, petsService } from '../services/index.js';
 import PetDTO from '../dto/Pet.dto.js';
 
 export const mocksRouter = Router()
-console.log("Ruta Mocks: Activa")
 
 
 const generatePets = (userId) => {
@@ -35,7 +34,7 @@ const generateUser = async () => {
         email:      faker.internet.email(),
         password: await createHash("coder123"), 
         role: faker.helpers.arrayElement(["user", "admin"]),
-        adoptions,
+        pets: [],
     }
 }
 
@@ -72,7 +71,8 @@ mocksRouter.post('/generateData', async (req, res) => {
                 last_name: faker.person.lastName(),
                 email: faker.internet.email(),
                 password: await createHash("coder123"),
-                role: faker.helpers.arrayElement(["user", "admin"])
+                role: faker.helpers.arrayElement(["user", "admin"]),
+                pets: []
             };
             await usersService.create(userData);
         }

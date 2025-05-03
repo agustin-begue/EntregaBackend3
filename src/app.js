@@ -1,6 +1,10 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
+import { swaggerOptions } from './utils/swagger.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+
 import usersRouter from './routes/users.router.js';
 import petsRouter from './routes/pets.router.js';
 import adoptionsRouter from './routes/adoption.router.js';
@@ -14,13 +18,18 @@ const app = express();
 const PORT = CONFIG.PORT
 conectaDB(CONFIG.MONGO_URI, CONFIG.DB_NAME);
 
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
+
+
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/users',usersRouter);
-app.use('/api/pets',petsRouter);
-app.use('/api/adoptions',adoptionsRouter);
-app.use('/api/sessions',sessionsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/pets', petsRouter);
+app.use('/api/adoptions', adoptionsRouter);
+app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocks', mocksRouter);
 
-app.listen(PORT,()=>console.log(`Listening on PORT: ${PORT}`))
+
+app.listen(PORT, () => console.log(`Listening on PORT: ${PORT}`))

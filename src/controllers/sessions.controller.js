@@ -18,9 +18,9 @@ const register = async (req, res) => {
         }
         let result = await usersService.create(user);
         console.log(result);
-        res.send({ status: "success", payload: result._id });
+        res.status(201).send({ status: "success", payload: result._id });
     } catch (error) {
-
+res.status(500).send({status: "error", error: "Internal Server Error"});
     }
 }
 

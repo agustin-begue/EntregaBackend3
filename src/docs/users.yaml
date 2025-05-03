@@ -1,0 +1,295 @@
+paths:
+  /api/users/:
+    get:
+      summary: Get all users
+      tags:
+        - Users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:  
+                  status: 
+                    type: string
+                    example: success
+                    description: The status of the response
+                  payload:
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/User'
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+  /api/users/{uid}:
+    get:
+      summary: Get a user by ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: The ID of the user to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A user object
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                    description: The status of the response
+                  payload:
+                    type: object
+                    $ref: '#/components/schemas/User'
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    put:
+      summary: Update a user by ID
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          descriuption: The ID of the user to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  description: The first name of the user
+                  example: John
+                last_name:
+                  type: string
+                  description: The last name of the user
+                  example: Doe
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                    description: The status of the response
+                  payload: 
+                    type: string
+                    example: User updated
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+    delete:
+      summary: Delete a user by ID
+      tags:
+        - Users
+      parameters:
+          - name: uid
+            in: path
+            required: true
+            description: The ID of the user to delete
+            schema:
+              type: string
+      responses:
+        "200":
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User deleted
+        "404":
+          description: User not found
+        "500":
+          description: Internal Server Error
+  /api/sessions/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/UserCreate'
+      responses:
+        "201":
+          description: User created succesfully
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                    description: The status of the response
+                  payload:
+                    type: string
+                    example: 1234567890abcdef12345678
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+  /api/sessions/login:
+    post:
+      summary: User login
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email address of the user
+                  example: johndoe@gmail.com
+                password:
+                  type: string
+                  description: The password of the user
+                  example: password123
+      responses:
+        "200":
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Logged in
+        "400":
+          description: Incomplete values or incorrect password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: "Incorrect password"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: "User doesn't exist"
+        "500":
+          description: Internal Server Error
+
+
+# puedo especificar como va a mostrarnos estas dos respuestas tambien, como renderiza la response
+
+# get users (no recibe params)
+# get users by ID (si recibe params)
+# put users by ID (si recibe params)
+# sessions register
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The unique identifier for the user
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+        email:
+          type: string
+          description: the email adress od the user
+        password:
+          type: string
+          description: the password of the user
+        role:
+          type: string
+          description: The role of the user (e.g., user, admin)
+        pets:
+          type: array
+          description: the pets owned by the user
+        _v:
+          type: integer
+          description: The version of the user document in the database
+      example:
+        _id: 1234567890abcdef12345678
+        first_name: John
+        last_name: Doe
+        email: johndoe@gmail.com
+        password: password123
+        role: user
+        pets: ["67bcb79ca9340155067601fa"]
+        _v: 0
+    UserCreate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          description: The first name of the user
+        last_name:
+          type: string
+          description: The last name of the user
+        email:
+          type: string
+          description: the email adress od the user
+        password:
+          type: string
+          description: the password of the user
+      example:
+        first_name: John
+        last_name: Doe
+        email: johndoe@gmail.com
+        password: password123
+
+
+
+# dentro de schema puedo completar el resto de entidades (pets, adoptions)
